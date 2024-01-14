@@ -45,6 +45,16 @@
             <artifactId>ape-job-models</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.kumuluz.ee.graphql</groupId>
+            <artifactId>kumuluzee-graphql-mp</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.kumuluz.ee.graphql</groupId>
+            <artifactId>kumuluzee-graphql-ui</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

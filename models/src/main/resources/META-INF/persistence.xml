@@ -1,26 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" version="2.1">
     <persistence-unit name="ape-job-jpa" transaction-type="RESOURCE_LOCAL">
-        <non-jta-data-source>jdbc/APEParcelDS</non-jta-data-source>
+        <non-jta-data-source>jdbc/APEJobDS</non-jta-data-source>
 
-        <class>si.ape.job.models.entities.ParcelEntity</class>
-        <class>si.ape.job.models.entities.ParcelStatusEntity</class>
-        <class>si.ape.job.models.entities.StreetEntity</class>
+        <class>si.ape.job.models.entities.BranchEntity</class>
+        <class>si.ape.job.models.entities.BranchTypeEntity</class>
         <class>si.ape.job.models.entities.CityEntity</class>
         <class>si.ape.job.models.entities.CountryEntity</class>
-        <class>si.ape.job.models.entities.UserEntity</class>
-        <class>si.ape.job.models.entities.RoleEntity</class>
         <class>si.ape.job.models.entities.CustomerEntity</class>
+        <class>si.ape.job.models.entities.EmployeeEntity</class>
+        <class>si.ape.job.models.entities.JobEntity</class>
+        <class>si.ape.job.models.entities.JobParcelEntity</class>
+        <class>si.ape.job.models.entities.JobStatusEntity</class>
+        <class>si.ape.job.models.entities.JobTypeEntity</class>
+        <class>si.ape.job.models.entities.ParcelEntity</class>
+        <class>si.ape.job.models.entities.ParcelStatusEntity</class>
+        <class>si.ape.job.models.entities.RoleEntity</class>
+        <class>si.ape.job.models.entities.StreetEntity</class>
+        <class>si.ape.job.models.entities.UserEntity</class>
 
-        <class>si.ape.job.models.converters.InstantAtributeConverter</class>
-        <class>si.ape.job.models.converters.ParcelConverter</class>
-        <class>si.ape.job.models.converters.ParcelStatusConverter</class>
-        <class>si.ape.job.models.converters.StreetConverter</class>
+        <class>si.ape.job.models.converters.BranchConverter</class>
+        <class>si.ape.job.models.converters.BranchTypeConverter</class>
         <class>si.ape.job.models.converters.CityConverter</class>
         <class>si.ape.job.models.converters.CountryConverter</class>
-        <class>si.ape.job.models.converters.UserConverter</class>
-        <class>si.ape.job.models.converters.RoleConverter</class>
         <class>si.ape.job.models.converters.CustomerConverter</class>
+        <class>si.ape.job.models.converters.EmployeeConverter</class>
+        <class>si.ape.job.models.converters.InstantAtributeConverter</class>
+        <class>si.ape.job.models.converters.JobConverter</class>
+        <class>si.ape.job.models.converters.JobParcelConverter</class>
+        <class>si.ape.job.models.converters.JobStatusConverter</class>
+        <class>si.ape.job.models.converters.JobTypeConverter</class>
+        <class>si.ape.job.models.converters.ParcelConverter</class>
+        <class>si.ape.job.models.converters.ParcelStatusConverter</class>
+        <class>si.ape.job.models.converters.RoleConverter</class>
+        <class>si.ape.job.models.converters.StreetConverter</class>
+        <class>si.ape.job.models.converters.UserConverter</class>
 
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>

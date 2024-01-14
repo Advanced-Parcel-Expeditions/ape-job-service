@@ -8,4 +8,23 @@ kumuluzee:
     http:
       port: 8080
   datasources:
-    - jndi-name: jdbc/APEParcelDS
+    - jndi-name: jdbc/APEJobDS
+  graphql:
+    mapping: graphql
+    ui:
+      enabled: true
+    scanning:
+      optimize: false
+    defaults:
+      offset: 0
+      limit: 10
+    exceptions:
+      include-show-error-defaults: false
+      show-exception-message: true
+      show-error-message:
+        - java.lang.Exception
+        - java.lang.RuntimeException
+        - javax.ws.rs.WebApplicationException
+        - javax.ws.rs.NotFoundException
+        - javax.ws.rs.NotAllowedException
+        - java.time.DateTimeException

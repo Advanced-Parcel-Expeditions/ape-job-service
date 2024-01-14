@@ -1,0 +1,14 @@
+package si.ape.job.services.machine;
+
+public enum JobType {
+
+    ORDER_PROCESSING,
+    HANDOVER,
+    CHECK_IN,
+    CHECK_OUT,
+    CARGO_DEPARTING_CONFIRMATION,
+    CARGO_ARRIVAL_CONFIRMATION,
+    DELIVERY_CARGO_CONFIRMATION,
+    PARCEL_HANDOVER
+
+}

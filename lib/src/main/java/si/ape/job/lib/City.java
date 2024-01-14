@@ -22,6 +22,16 @@ public class City {
     private Country country;
 
     /**
+     * The latitude of the city.
+     */
+    private Double latitude;
+
+    /**
+     * The longitude of the city.
+     */
+    private Double longitude;
+
+    /**
      * Gets the city code.
      *
      * @return the city code
@@ -58,6 +68,42 @@ public class City {
     }
 
     /**
+     * Gets the latitude of the city.
+     *
+     * @return the latitude of the city
+     */
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    /**
+     * Sets the latitude of the city.
+     *
+     * @param latitude the latitude of the city
+     */
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    /**
+     * Gets the longitude of the city.
+     *
+     * @return the longitude of the city
+     */
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    /**
+     * Sets the longitude of the city.
+     *
+     * @param longitude the longitude of the city
+     */
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    /**
      * Gets the country.
      *
      * @return the country
@@ -73,6 +119,19 @@ public class City {
      */
     public void setCountry(Country country) {
         this.country = country;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof City)) {
+            return false;
+        }
+        City other = (City) obj;
+        return this.code.equals(other.code) &&
+                this.name.equals(other.name) &&
+                this.country.equals(other.country) &&
+                this.latitude.equals(other.latitude) &&
+                this.longitude.equals(other.longitude);
     }
 
 }
