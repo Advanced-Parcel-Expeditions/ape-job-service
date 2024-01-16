@@ -49,46 +49,85 @@ public class JobBean {
         return jobs;
     }
 
-    public Job createJob(Job job, String parcelId) {
-        beginTx();
-        JobEntity jobEntity = new JobEntity();
-        jobEntity.setDateCreated(Instant.now());
-        JobStatusEntity jobStatusEntity = em.find(JobStatusEntity.class, 1);
-        jobEntity.setJobStatus(jobStatusEntity);
-        jobEntity.setJobType(em.find(JobTypeEntity.class, job.getJobType().getId()));
-        jobEntity.setStaff(em.find(EmployeeEntity.class, job.getStaff().getId()));
-        em.persist(jobEntity);
-        commitTx();
+    public Parcel viewParcelOfJob(Integer jobId) {
+        TypedQuery<ParcelEntity> query = em.createNamedQuery("JobParcelEntity.getParcelByJobId", ParcelEntity.class);
+        query.setParameter("jobId", jobId);
+        ParcelEntity parcelEntity = query.getResultList().stream().findFirst().orElse(null);
+        if (parcelEntity != null) {
+            return ParcelConverter.toDto(parcelEntity);
+        }
+        return null;
+    }
 
-        beginTx();
-        ParcelEntity parcelEntity = em.find(ParcelEntity.class, parcelId);
-        JobParcelEntity jobParcelEntity = new JobParcelEntity();
-        jobParcelEntity.setJob(jobEntity);
-        jobParcelEntity.setParcel(parcelEntity);
-        em.persist(jobParcelEntity);
-        commitTx();
-        return JobConverter.toDto(jobEntity);
+    public Job createJob(Job job, String parcelId) {
+        try {
+            beginTx();
+            JobEntity jobEntity = new JobEntity();
+            jobEntity.setDateCreated(Instant.now());
+            JobStatusEntity jobStatusEntity = em.find(JobStatusEntity.class, 1);
+            jobEntity.setJobStatus(jobStatusEntity);
+            jobEntity.setJobType(em.find(JobTypeEntity.class, job.getJobType().getId()));
+            jobEntity.setStaff(em.find(EmployeeEntity.class, job.getStaff().getId()));
+            em.persist(jobEntity);
+            commitTx();
+
+            beginTx();
+            ParcelEntity parcelEntity = em.find(ParcelEntity.class, parcelId);
+            JobParcelEntity jobParcelEntity = new JobParcelEntity();
+            jobParcelEntity.setJob(jobEntity);
+            jobParcelEntity.setParcel(parcelEntity);
+            em.persist(jobParcelEntity);
+            commitTx();
+            return JobConverter.toDto(jobEntity);
+        } catch(Exception e){
+            rollbackTx();
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public Job completeJob(Integer jobId) {
-        beginTx();
         JobEntity jobEntity = em.find(JobEntity.class, jobId);
-        JobStatusEntity jobStatusEntity = em.find(JobStatusEntity.class, JOB_STATUS_COMPLETED);
-        log.info("Job ID: " + jobId + " Job status: " + jobStatusEntity + " Job entity: " + jobEntity);
-        jobEntity.setJobStatus(jobStatusEntity);
-        jobEntity.setDateCompleted(Instant.now());
-        jobStateMachine.next(jobEntity);
-        commitTx();
+        if (jobEntity != null) {
+            beginTx();
+            JobStatusEntity jobStatusEntity = em.find(JobStatusEntity.class, JOB_STATUS_COMPLETED);
+            log.info("Job ID: " + jobId + " Job status: " + jobStatusEntity + " Job entity: " + jobEntity);
+            jobEntity.setJobStatus(jobStatusEntity);
+            jobEntity.setDateCompleted(Instant.now());
+            jobStateMachine.next(jobEntity);
+            commitTx();
+        }
         return JobConverter.toDto(jobEntity);
     }
 
     public Job cancelJob(Integer jobId) {
-        beginTx();
         JobEntity jobEntity = em.find(JobEntity.class, jobId);
-        JobStatusEntity jobStatusEntity = em.find(JobStatusEntity.class, JOB_STATUS_CANCELLED);
-        jobEntity.setJobStatus(jobStatusEntity);
-        commitTx();
-        return JobConverter.toDto(jobEntity);
+        if (jobEntity != null) {
+            beginTx();
+            JobStatusEntity jobStatusEntity = em.find(JobStatusEntity.class, JOB_STATUS_CANCELLED);
+            jobEntity.setJobStatus(jobStatusEntity);
+            commitTx();
+        }
+        return null;
+    }
+
+    public Job linkJobAndParcel(Integer jobId, String parcelId) {
+        JobEntity jobEntity = em.find(JobEntity.class, jobId);
+        if (jobEntity != null) {
+            beginTx();
+            ParcelEntity parcelEntity = em.find(ParcelEntity.class, parcelId);
+            if (parcelEntity != null) {
+                JobParcelEntity jobParcelEntity = new JobParcelEntity();
+                jobParcelEntity.setJob(jobEntity);
+                jobParcelEntity.setParcel(parcelEntity);
+                em.persist(jobParcelEntity);
+                commitTx();
+                return JobConverter.toDto(jobEntity);
+            } else {
+                rollbackTx();
+            }
+        }
+        return null;
     }
 
     private void beginTx() {

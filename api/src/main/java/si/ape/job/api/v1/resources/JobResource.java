@@ -13,6 +13,7 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import si.ape.job.api.v1.resources.requests.CreateJobRequest;
 import si.ape.job.lib.connections.JobConnection;
+import si.ape.job.lib.connections.ParcelConnection;
 import si.ape.job.services.beans.JobBean;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -57,6 +58,15 @@ public class JobResource {
         return new JobConnection(jobs, jobs.size());
     }
 
+    @Query
+    public ParcelConnection viewParcelOfJob(@Parameter(description = "Job ID") @Name("jobId") Integer jobId) {
+        Parcel parcel = jobBean.viewParcelOfJob(jobId);
+        if (parcel == null) {
+            return new ParcelConnection(List.of(), 0);
+        }
+        return new ParcelConnection(List.of(parcel), 1);
+    }
+
     @Mutation
     public JobConnection createJob(@RequestBody(required = true, content = @Content(schema = @Schema(implementation = CreateJobRequest.class))) @Name("jobRequest") CreateJobRequest jobRequest) {
         Job job = jobBean.createJob(jobRequest.getJob(), jobRequest.getParcelId());
@@ -72,6 +82,16 @@ public class JobResource {
     @Mutation
     public JobConnection cancelJob(@Parameter(description = "Job ID") @Name("jobId") Integer jobId) {
         Job job = jobBean.cancelJob(jobId);
+        return new JobConnection(List.of(job), 1);
+    }
+
+    @Mutation
+    public JobConnection linkJobAndParcel(@Parameter(description = "Job ID") @Name("jobId") Integer jobId,
+    		@Parameter(description = "Parcel ID") @Name("parcelId") String parcelId) {
+        Job job = jobBean.linkJobAndParcel(jobId, parcelId);
+        if (job == null) {
+            return new JobConnection(List.of(), 0);
+        }
         return new JobConnection(List.of(job), 1);
     }
 
